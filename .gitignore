@@ -1,0 +1,15 @@
+.DS_Store
+node_modules/
+dist/
+outputs/
+work/
+scripts/
+demo-data.js
+demo.css
+ordex-demo.js
+PRODUCT.md
+DESIGN.md
+*.log
+.env
+.env.*
+!.env.example

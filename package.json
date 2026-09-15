@@ -1,0 +1,28 @@
+{
+  "name": "ordex",
+  "private": true,
+  "version": "1.0.0",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/clorisHHH/ordex.git"
+  },
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 127.0.0.1",
+    "build": "vite build",
+    "test": "node --test model.test.js drop-target.test.js archive.test.js file-type.test.js import-name.test.js i18n.test.js desktop/storage.test.cjs"
+  },
+  "dependencies": {
+    "docx-preview": "^0.4.0",
+    "jszip": "^3.10.1",
+    "motion": "^13.2.0",
+    "pdfjs-dist": "^6.3.289",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "vite": "^6.1.0"
+  },
+  "devDependencies": {
+    "electron": "^44.3.0"
+  }
+}

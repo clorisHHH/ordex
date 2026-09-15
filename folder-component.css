@@ -1,0 +1,10 @@
+.folder-component{position:relative;width:100%;height:100%;display:flex;align-items:center;justify-content:center}
+.folder-component-shell{position:relative;cursor:pointer;user-select:none}
+.folder-component-canvas{position:absolute;top:50%;left:50%}
+.folder-component-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%)}
+.folder-component-cards{display:flex;align-items:center;justify-content:center}
+.folder-component-card{position:absolute}
+.folder-component-card svg{display:block;width:164px;height:214px;flex-shrink:0}
+.folder-component-flap{position:absolute;top:50%;left:50%;translate:-50% -50%;margin-top:1rem}
+.folder-component-glass{position:absolute;inset:0;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);transform:translateZ(0);backface-visibility:hidden;-webkit-backface-visibility:hidden;will-change:transform}
+.folder-component-svg{position:absolute;inset:0;width:321px;height:241px;flex-shrink:0}
