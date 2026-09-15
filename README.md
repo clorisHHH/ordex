@@ -1,10 +1,36 @@
 # Ordex
 
-Ordex 是一款免费开源、可离线使用的文件编排桌面工具。它把导入文件复制到用户选择的项目目录，通过最多五级编号、拖拽排序和回收站帮助整理文件；原文件不会被移动或修改。
+Ordex 是一款免费开源、离线可用的文件顺序编排工具：拖拽即可调整文件和文件夹顺序，自动生成多级编号，并一键导出按编号命名的资料包。增删或移动文件后，编号会随顺序自动更新，无须逐个重命名，也不会改动你的原文件。
 
-Ordex is a free, open-source desktop file organizer that works offline. It copies imports into a project folder you choose, then helps you organize them with numbering, drag-and-drop ordering, and a recoverable trash. Your original files remain untouched.
+Ordex is a free, open-source file organizer that works offline: drag files and folders into order, get automatic multilevel numbering, and export a ZIP with the final numbers in its filenames. Numbers update as you add, remove, or move items, so you never have to renumber everything by hand; your original files remain untouched.
 
 [下载 Mac / Windows 首发版 · Download the initial Mac / Windows release](https://github.com/clorisHHH/ordex/releases/tag/v1.0.0)
+
+## 操作示例 / Walkthrough
+
+以下截图使用英文界面；点击右上角地球图标可切换中文或 English。截图仅展示示例，不包含在安装包中。
+
+These screenshots show the English interface. Use the globe icon in the upper-right corner to switch between 中文 and English. The sample shown here is not included in the installers.
+
+1. **我的项目 / My Projects** — 创建、查找并打开项目。Create, find, and open projects.
+
+   ![我的项目页面 / My Projects page](docs/screenshots/01-my-projects.png)
+
+2. **自动编号 / Automatic numbering** — 导入文件后，Ordex 按当前顺序显示多级编号。Imported files receive multilevel numbers based on their current order.
+
+   ![导入文件并自动编号 / Imported files with automatic numbering](docs/screenshots/02-auto-numbering.png)
+
+3. **拖拽指引 / Guided drag and drop** — 拖动时显示放置位置和变更后的编号。While dragging, Ordex shows the drop position and resulting number.
+
+   ![拖拽位置和新编号提示 / Drop position and new-number guidance](docs/screenshots/03-drag-guidance.png)
+
+4. **文件夹内排序 / Nested folder ordering** — 文件夹及其内部文件可以分别排序，层级编号一目了然。Sort folders and their contents while keeping the numbered hierarchy clear.
+
+   ![文件夹内的多级编号 / Multilevel numbering inside a folder](docs/screenshots/04-nested-folders.png)
+
+5. **编号导出 / Numbered export** — 导出的副本按最终顺序命名，文件和文件夹都带有编号；原文件不变。Exported copies have their final numbers in file and folder names; originals remain unchanged.
+
+   ![导出后带编号的本地文件 / Locally exported files with final numbers](docs/screenshots/05-numbered-export.png)
 
 ## 特性
 
@@ -19,7 +45,7 @@ Ordex is a free, open-source desktop file organizer that works offline. It copie
 
 ## 数据与隐私
 
-仓库不包含任何用户数据、演示项目、视频、音频或安装包。
+仓库中的截图仅用于展示界面；不包含用户项目数据、截图中演示项目的实际文件、视频、音频或安装包。
 
 桌面版将项目索引保存在本机 Ordex 设置目录中，文件副本和 `.ordex` 编排数据保存在用户选择的项目文件夹。
 
