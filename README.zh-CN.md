@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="https://raw.githubusercontent.com/clorisHHH/ordex/main/public/ordex-logo.png" alt="Ordex" width="520" />
+  <img src="https://raw.githubusercontent.com/clorisHHH/ordex/main/public/ordex-wordmark.png" alt="Ordex" width="300" />
 
   <h1>Ordex</h1>
   <p>免费、离线可用的 macOS 和 Windows 桌面文件顺序编排工具。</p>

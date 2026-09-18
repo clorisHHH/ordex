@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="https://raw.githubusercontent.com/clorisHHH/ordex/main/public/ordex-logo.png" alt="Ordex" width="520" />
+  <img src="https://raw.githubusercontent.com/clorisHHH/ordex/main/public/ordex-wordmark.png" alt="Ordex" width="300" />
 
   <h1>Ordex</h1>
   <p>Free, offline desktop file organizer for macOS and Windows.</p>
