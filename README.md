@@ -30,15 +30,19 @@ These screenshots show the English interface. Use the globe icon in the upper-ri
 
    ![导入文件并自动编号 / Imported files with automatic numbering](docs/screenshots/02-auto-numbering.png)
 
-3. **拖拽指引 / Guided drag and drop** — 拖动时显示放置位置和变更后的编号。While dragging, Ordex shows the drop position and resulting number.
+3. **编号模式（2.0 新增）/ Numbering schemes (new in 2.0)** — 点击工具栏编号按钮打开编号选项面板，可切换 `a b c`、`i ii iii`、`一 二 三` 等形式，并按层级与分隔符自由组合，示例实时预览。Click the numbering button in the toolbar to open the scheme panel: switch between `a b c`, `i ii iii`, Chinese numerals and more, with per-level settings, a separator option, and a live sample preview.
+
+   ![编号选项面板 / Numbering scheme panel](docs/screenshots/06-numbering-schemes.png)
+
+4. **拖拽指引 / Guided drag and drop** — 拖动时显示放置位置和变更后的编号。While dragging, Ordex shows the drop position and resulting number.
 
    ![拖拽位置和新编号提示 / Drop position and new-number guidance](docs/screenshots/03-drag-guidance.png)
 
-4. **文件夹内排序 / Nested folder ordering** — 文件夹及其内部文件可以分别排序，层级编号一目了然。Sort folders and their contents while keeping the numbered hierarchy clear.
+5. **文件夹内排序 / Nested folder ordering** — 文件夹及其内部文件可以分别排序，层级编号一目了然。Sort folders and their contents while keeping the numbered hierarchy clear.
 
    ![文件夹内的多级编号 / Multilevel numbering inside a folder](docs/screenshots/04-nested-folders.png)
 
-5. **编号导出 / Numbered export** — 导出的副本按最终顺序命名，文件和文件夹都带有编号；原文件不变。Exported copies have their final numbers in file and folder names; originals remain unchanged.
+6. **编号导出 / Numbered export** — 导出的副本按最终顺序命名，文件和文件夹都带有编号；原文件不变。Exported copies have their final numbers in file and folder names; originals remain unchanged.
 
    ![导出后带编号的本地文件 / Locally exported files with final numbers](docs/screenshots/05-numbered-export.png)
 
@@ -46,7 +50,7 @@ These screenshots show the English interface. Use the globe icon in the upper-ri
 
 - 新建项目时由用户选择本地保存位置
 - 导入文件时复制副本，不移动或修改原文件
-- 最多五级数字编号与拖拽重排
+- 最多五级编号（数字 / 字母 / 罗马数字 / 中文等可切换）与拖拽重排
 - 文件和文件夹删除、恢复及单项永久删除
 - 可随时开启或关闭去除原编号，并恢复完整原始文件名
 - 中英文界面切换；Mac 使用原生 Quick Look，Windows 使用软件内空格预览
