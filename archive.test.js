@@ -21,3 +21,12 @@ test('普通文件的逻辑下级保持完整编号，同目录导出，缺失�
  assert.ok(zip.file('1 组/1.1 说明.pdf'));assert.ok(zip.file('1 组/1.1.1 附件.pdf'));
  await assert.rejects(()=>buildArchive(nodes,id=>id===child.id?null:new Blob(['pdf'])),/文件内容缺失/);
 });
+
+test('ZIP 文件名使用当前编号方案',async()=>{
+ const {PRESETS}=await import('./numbering.js');
+ const child=n('附件.pdf','file'),parent=n('说明.pdf','file',{children:[child]}),nodes=[n('组','section',{children:[parent]})];
+ const scheme=PRESETS.find(p=>p.id==='legal');
+ const zip=await JSZip.loadAsync(await buildArchive(nodes,()=>new Blob(['pdf']),scheme));
+ assert.ok(zip.file('1 组/1(a) 说明.pdf'));
+ assert.ok(zip.file('1 组/1(a)(i) 附件.pdf'));
+});

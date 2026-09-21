@@ -1,21 +1,18 @@
-export function stripOrdinalPrefix(name){
- const value=String(name);
- const exhibit=/^\s*exhibit\s*[-_:：]?\s*\d{1,3}(?:\.\d{1,3}){0,8}(?:\.\s+|\s*[)、）:：_-]\s*|\s+)/i;
- const hierarchical=/^\s*\d{1,3}(?:\.\d{1,3}){1,4}(?:\.\s+|\s*[)、）:：_-]\s*|\s+)/;
- const simple=/^\s*(?:\(\d{1,3}\)|（\d{1,3}）|\[\d{1,3}\]|第\d{1,3}(?:项|份|篇|章)?|\d{1,3}(?:\.\s+|[)、）]\s*))\s*/;
- const cleaned=value.replace(exhibit,'').replace(hierarchical,'').replace(simple,'');
- return cleaned||value;
+import {stripOrdinalPrefix as stripByScheme} from './numbering.js';
+
+export function stripOrdinalPrefix(name,scheme){
+ return stripByScheme(name,scheme);
 }
 
-export function normalizeImportedName(name,removeNumbering=true){
- return removeNumbering?stripOrdinalPrefix(name):String(name);
+export function normalizeImportedName(name,removeNumbering=true,scheme){
+ return removeNumbering?stripOrdinalPrefix(name,scheme):String(name);
 }
 
-export function applyNumberingPreference(nodes,removeNumbering){
+export function applyNumberingPreference(nodes,removeNumbering,scheme){
  const visit=node=>{
   if(node.type==='file'){
    if(typeof node.originalName!=='string')node.originalName=node.name;
-   node.name=normalizeImportedName(node.originalName,removeNumbering);
+   node.name=normalizeImportedName(node.originalName,removeNumbering,scheme);
   }
   for(const child of node.children||[])visit(child);
  };

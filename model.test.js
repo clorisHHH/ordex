@@ -12,3 +12,35 @@ test('恢复需先恢复被删除父级，父级永久缺失则生成恢复分�
 test('批量删除同级项目保存各自原编号并可逐个恢复',async()=>{const {recycle,restoreEntry}=await import('./model.js');const a=n('a','file'),b=n('b','file'),c=n('c','file'),r=n('r','section',{children:[a,b,c]}),tree=[r],trash=[];recycle(tree,trash,[a.id,b.id]);assert.deepEqual(trash.map(e=>e.number),['1.1','1.2']);restoreEntry(tree,trash,trash[0].id);restoreEntry(tree,trash,trash[0].id);assert.deepEqual(r.children.map(n=>n.id),[a.id,b.id,c.id]);});
 test('批量删除同级项目后以任意顺序恢复仍回到原顺序',async()=>{const {recycle,restoreEntry}=await import('./model.js');const a=n('a','file'),b=n('b','file'),c=n('c','file'),r=n('r','section',{children:[a,b,c]}),tree=[r],trash=[];recycle(tree,trash,[a.id,b.id]);restoreEntry(tree,trash,trash.find(e=>e.node.id===b.id).id);restoreEntry(tree,trash,trash.find(e=>e.node.id===a.id).id);assert.deepEqual(r.children.map(n=>n.id),[a.id,b.id,c.id]);});
 test('回收站项目可以单独永久删除且不影响其他项目',async()=>{const {recycle,discardTrashEntry}=await import('./model.js');const a=n('a','file'),b=n('b','file'),r=n('r','section',{children:[a,b]}),tree=[r],trash=[];recycle(tree,trash,[a.id,b.id]);assert.equal(discardTrashEntry(trash,trash[0].id).id,a.id);assert.deepEqual(trash.map(entry=>entry.node.id),[b.id]);assert.throws(()=>discardTrashEntry(trash,'missing'),/找不到回收项目/);});
+
+test('导出与回收站编号跟随当前编号方案',async()=>{
+ const {recycle,restoreEntry,exportEntries}=await import('./model.js');
+ const {PRESETS}=await import('./numbering.js');
+ const scheme=PRESETS.find(p=>p.id==='alpha');
+ const tree=[n('材料','section',{children:[n('说明.pdf','file'),n('合同','folder',{children:[n('原件.pdf','file')]})]})];
+ assert.deepEqual(exportEntries(tree,scheme).map(x=>x.path),['A 材料/','A 材料/A.a 说明.pdf','A 材料/A.b 合同/','A 材料/A.b 合同/A.b.i 原件.pdf']);
+ const trash=[];
+ recycle(tree,trash,[tree[0].children[0].id],scheme);
+ assert.equal(trash[0].number,'A.a');
+ assert.equal(restoreEntry(tree,trash,trash[0].id,scheme),'A.a');
+});
+
+test('批量移出上一层：同层多项保持树序追加到末尾',async()=>{
+ const {moveOutMany}=await import('./model.js');
+ const tree=[n('一','section',{children:[n('f1','folder',{children:[n('a.pdf','file'),n('b.pdf','file')]}),n('c.pdf','file')]}),n('二','section',{children:[n('d.pdf','file')]})];
+ const ids=[tree[0].children[0].children[1].id,tree[0].children[0].children[0].id];
+ const moved=moveOutMany(tree,ids);
+ assert.equal(moved,2);
+ assert.deepEqual(tree[0].children.map(x=>x.name),['f1','c.pdf','a.pdf','b.pdf']);
+ assert.deepEqual(tree[0].children[0].children,[]);
+});
+test('批量移出：二级标与一级标下的直接子项保持不动',async()=>{
+ const {moveOutMany}=await import('./model.js');
+ const f1=n('f1','folder',{children:[n('a.pdf','file')]});
+ const tree=[n('一','section',{children:[f1,n('c.pdf','file')]}),n('二','section',{children:[n('d.pdf','file')]})];
+ const ids=[f1.id,tree[1].children[0].id];
+ const moved=moveOutMany(tree,ids);
+ assert.equal(moved,0);
+ assert.deepEqual(tree[0].children.map(x=>x.name),['f1','c.pdf']);
+ assert.deepEqual(tree[1].children.map(x=>x.name),['d.pdf']);
+});

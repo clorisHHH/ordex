@@ -14,9 +14,11 @@ function buildMenu(){const text=nativeMessages[language];Menu.setApplicationMenu
 if(!app.requestSingleInstanceLock()){app.quit();}else{
  app.on('second-instance',()=>{if(win){if(win.isMinimized())win.restore();win.show();win.focus();}});
  app.whenReady().then(()=>{
- dataRoot=path.join(app.getPath('appData'),'Ordex');store=new DiskStore(dataRoot);
+ dataRoot=process.env.ORDEX_DATA_ROOT||path.join(app.getPath('appData'),'Ordex');store=new DiskStore(dataRoot);
  const dist=path.join(__dirname,'../dist');
- protocol.handle('ordex',request=>{const u=new URL(request.url);const target=path.resolve(dist,'.'+decodeURIComponent(u.pathname==='/'?'/index.html':u.pathname));if(u.host!=='app'||!target.startsWith(dist+path.sep))return new Response('Not found',{status:404});return net.fetch(pathToFileURL(target).href);});
+ // 热预览时 vite 会先清空 dist 再写入，加载撞上这个窗口会 404，这里短暂等待文件出现
+ const waitForFile=(file,timeout=2500)=>new Promise(resolve=>{const start=Date.now();const check=()=>{if(fs.existsSync(file)||Date.now()-start>timeout)return resolve();setTimeout(check,50);};check();});
+ protocol.handle('ordex',async request=>{const u=new URL(request.url);const target=path.resolve(dist,'.'+decodeURIComponent(u.pathname==='/'?'/index.html':u.pathname));if(u.host!=='app'||!target.startsWith(dist+path.sep))return new Response('Not found',{status:404});if(process.env.ORDEX_HOT==='1')await waitForFile(target);return net.fetch(pathToFileURL(target).href);});
  session.defaultSession.webRequest.onBeforeRequest((details,callback)=>callback({cancel:/^https?:|^wss?:/.test(details.url)}));
  session.defaultSession.setPermissionRequestHandler((_wc,_permission,callback)=>callback(false));
  const trusted=e=>{if(!win||e.sender!==win.webContents||!e.senderFrame?.url.startsWith('ordex://app/'))throw Error('拒绝非应用来源');};
@@ -42,5 +44,6 @@ if(!app.requestSingleInstanceLock()){app.quit();}else{
  win.on('closed',()=>{win=null;app.quit();});
  buildMenu();
  win.loadURL('ordex://app/');
+ if(process.env.ORDEX_HOT==='1'){let reloadTimer;try{fs.watch(dist,{recursive:true},()=>{clearTimeout(reloadTimer);reloadTimer=setTimeout(()=>{if(win&&!win.isDestroyed()){console.log('[ordex] 构建产物已更新，重新加载');win.webContents.reload();}},250);});console.log('[ordex] 热重载已开启');}catch(e){console.error('[ordex] 无法监听构建产物：'+e.message);}}
  }).catch(e=>{dialog.showErrorBox('Ordex 启动失败',e.message);app.exit(1);});
 }

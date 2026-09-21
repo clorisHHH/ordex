@@ -1,11 +1,13 @@
+import {DEFAULT_SCHEME,formatNumber,normalizeScheme} from './numbering.js';
 export const uid = () => crypto.randomUUID();
+const number = (path,scheme) => formatNumber(path,normalizeScheme(scheme));
 export function swapSections(nodes,a,b){const x=nodes.findIndex(n=>n.id===a),y=nodes.findIndex(n=>n.id===b);if(x<0||y<0)throw Error('只能交换两个一级标');[nodes[x],nodes[y]]=[nodes[y],nodes[x]];}
-export function recycle(nodes,trash,ids){
+export function recycle(nodes,trash,ids,scheme=DEFAULT_SCHEME){
  const targets=ids.map(id=>locate(nodes,id)).filter(Boolean).filter(s=>!ids.some(id=>id!==s.node.id&&locate(nodes,id)&&locate(locate(nodes,id).node.children,s.node.id)));
- for(const s of targets)trash.push({id:uid(),node:s.node,parentId:s.parent?.id||null,index:s.index,previousId:s.list[s.index-1]?.id||null,nextId:s.list[s.index+1]?.id||null,number:s.path.join('.'),deletedAt:Date.now()});
+ for(const s of targets)trash.push({id:uid(),node:s.node,parentId:s.parent?.id||null,index:s.index,previousId:s.list[s.index-1]?.id||null,nextId:s.list[s.index+1]?.id||null,number:number(s.path,scheme),deletedAt:Date.now()});
  for(const s of targets){const current=locate(nodes,s.node.id);current.list.splice(current.index,1);}
 }
-export function restoreEntry(nodes,trash,id){
+export function restoreEntry(nodes,trash,id,scheme=DEFAULT_SCHEME){
  const entry=trash.find(e=>e.id===id);if(!entry)throw Error('找不到回收项目');
  let parent=entry.parentId?locate(nodes,entry.parentId):null;
  if(entry.parentId&&!parent){
@@ -15,7 +17,7 @@ export function restoreEntry(nodes,trash,id){
  if(parent&&(parent.path.length+height(entry.node)>5||(parent.node.type==='file'&&containsFolder(entry.node))))throw Error('原位置的层级已改变，请先将原位置移回较外层再恢复');
  const list=parent?parent.node.children:nodes,previous=list.findIndex(node=>node.id===entry.previousId),next=list.findIndex(node=>node.id===entry.nextId);
  const index=previous>=0?previous+1:next>=0?next:Math.min(entry.index,list.length);list.splice(index,0,entry.node);trash.splice(trash.indexOf(entry),1);
- return locate(nodes,entry.node.id).path.join('.');
+ return number(locate(nodes,entry.node.id).path,scheme);
 }
 export function discardTrashEntry(trash,id){
  const index=trash.findIndex(entry=>entry.id===id);if(index<0)throw Error('找不到回收项目');
@@ -40,5 +42,23 @@ export function move(nodes,id,targetId,position='inside'){
 }
 export const containsFolder = n => n.type==='folder'||n.children.some(containsFolder);
 export function moveOut(nodes,id){const s=locate(nodes,id);if(!s?.parent)throw Error('已经在最外层');const p=locate(nodes,s.parent.id);if(!p.parent)throw Error('已经是二级标，不能继续移出');move(nodes,id,p.parent.id);}
+export function moveOutMany(nodes,ids){
+ const entries=[];
+ for(const id of ids){
+  const s=locate(nodes,id);
+  if(!s||s.node.type==='section'||!s.parent)continue;
+  if(!locate(nodes,s.parent.id)?.parent)continue;
+  entries.push(s);
+ }
+ entries.sort((a,b)=>a.path.join('.')<b.path.join('.')?-1:1);
+ const movable=new Set(entries.map(s=>s.node.id)),moved=[];
+ for(const s of entries){
+  let followsMovableAncestor=false;
+  for(let cursor=s.parent;cursor;){if(movable.has(cursor.id)){followsMovableAncestor=true;break;}const located=cursor.parent?locate(nodes,cursor.parent.id):null;cursor=located?.parent||null;}
+  if(followsMovableAncestor)continue;
+  moveOut(nodes,s.node.id);moved.push(s.node.id);
+ }
+ return moved.length;
+}
 export const clean = s => s.replace(/[\\/:*?"<>|\x00-\x1f]/g,'_').replace(/[. ]+$/g,'').trim()||'未命名';
-export function exportEntries(nodes,base='',prefix=[]){return nodes.flatMap((n,i)=>{const path=[...prefix,i+1],name=path.join('.')+' '+clean(n.name);const dest=base+name;if(n.type==='file')return [{path:dest,node:n},...exportEntries(n.children,base,path)];return [{path:dest+'/',node:n},...exportEntries(n.children,dest+'/',path)];});}
+export function exportEntries(nodes,scheme=DEFAULT_SCHEME,base='',prefix=[]){return nodes.flatMap((n,i)=>{const path=[...prefix,i+1],name=number(path,scheme)+' '+clean(n.name);const dest=base+name;if(n.type==='file')return [{path:dest,node:n},...exportEntries(n.children,scheme,base,path)];return [{path:dest+'/',node:n},...exportEntries(n.children,scheme,dest+'/',path)];});}

@@ -11,7 +11,7 @@
   "scripts": {
     "dev": "vite --host 127.0.0.1",
     "build": "vite build",
-    "test": "node --test model.test.js drop-target.test.js archive.test.js file-type.test.js import-name.test.js i18n.test.js desktop/storage.test.cjs"
+    "test": "node --test model.test.js numbering.test.js drop-target.test.js archive.test.js file-type.test.js import-name.test.js i18n.test.js desktop/storage.test.cjs"
   },
   "dependencies": {
     "docx-preview": "^0.4.0",

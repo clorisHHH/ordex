@@ -1,7 +1,8 @@
 import JSZip from 'jszip';
+import {DEFAULT_SCHEME} from './numbering.js';
 import {exportEntries} from './model.js';
-export async function buildArchive(nodes,readFile){
- const entries=exportEntries(structuredClone(nodes)),zip=new JSZip();
+export async function buildArchive(nodes,readFile,scheme=DEFAULT_SCHEME){
+ const entries=exportEntries(structuredClone(nodes),scheme),zip=new JSZip();
  for(const entry of entries){
   if(entry.node.type!=='file'){zip.folder(entry.path);continue;}
   const file=await readFile(entry.node.id);
