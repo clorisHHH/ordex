@@ -38,7 +38,7 @@ These screenshots show the English interface. Use the globe icon in the upper-ri
 
    ![拖拽位置和新编号提示 / Drop position and new-number guidance](docs/screenshots/03-drag-guidance.png)
 
-5. **文件夹内排序 / Nested folder ordering** — 文件夹及其内部文件可以分别排序，层级编号一目了然。Sort folders and their contents while keeping the numbered hierarchy clear.
+5. **文件夹内排序 / Nested folder ordering** — 文件夹及其内部文件可以分别排序，层级编号一目了然。按空格键可以预览文件内容（windows版可能存在无法一比一还原文件排版的情况）。Sort folders and their contents while keeping the numbered hierarchy clear. Press the spacebar to preview the file content (please note that the Windows version may not perfectly replicate the original file layout).
 
    ![文件夹内的多级编号 / Multilevel numbering inside a folder](docs/screenshots/04-nested-folders.png)
 
